@@ -103,5 +103,8 @@ DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 CUDA_AVAILABLE = torch.cuda.is_available()
 
 # ==================== PATHS ====================
-TRAINED_MODEL_PATH = os.path.join(MODELS_DIR, 'emotion_detector_best.pth')
-BEST_MODEL_PATH = os.path.join(MODELS_DIR, 'emotion_detector_best.pth')
+# Use quantized model for faster inference, fall back to original if not available
+QUANTIZED_MODEL_PATH = os.path.join(MODELS_DIR, 'emotion_detector_best_quantized.pth')
+ORIGINAL_MODEL_PATH = os.path.join(MODELS_DIR, 'emotion_detector_best.pth')
+TRAINED_MODEL_PATH = QUANTIZED_MODEL_PATH if os.path.exists(QUANTIZED_MODEL_PATH) else ORIGINAL_MODEL_PATH
+BEST_MODEL_PATH = ORIGINAL_MODEL_PATH

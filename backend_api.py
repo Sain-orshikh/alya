@@ -25,12 +25,23 @@ from src.emotion_mapper import AnimeEmotionMapper
 app = FastAPI(title="Anime Mood Detector API")
 
 # Enable CORS for frontend
-# In production, update FRONTEND_URL to your deployed frontend
-FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:3000')
+# Get frontend URL from environment, strip trailing slashes
+FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:3000').rstrip('/')
+
+# CORS allowed origins
+allowed_origins = [
+    FRONTEND_URL,
+    f"{FRONTEND_URL}/",  # with trailing slash
+    'http://localhost:3000',
+    'http://localhost:3000/',
+    'http://localhost:8000',
+]
+
+print(f"✓ CORS enabled for origins: {allowed_origins}")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[FRONTEND_URL, 'http://localhost:3000', 'http://localhost:8000'],  # Local dev + production
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
